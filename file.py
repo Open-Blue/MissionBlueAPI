@@ -34,12 +34,22 @@ def validate_url(url: str) -> bool:
     try:
         page = requests.get(url, timeout=10)
         content_string = page.text
-        with open("tests/no_content_template.golden", "r", encoding="utf-8") as nct:
-            no_content_template = nct.read()
-            diff = unified_diff(content_string, no_content_template)
-            diff_string = "".join(diff)
-            if diff_string == "":
-                return False
+        try:
+            with open("tests/no_content_template.golden", "r", encoding="utf-8") as nct:
+                no_content_template = nct.read()
+        except FileNotFoundError:
+            print("Error: The golden file 'tests/no_content_template.golden' was not found.")
+            sys.exit(1)
+        except PermissionError:
+            print("Error: Permission denied while trying to read 'tests/no_content_template.golden'.")
+            sys.exit(1)
+        except OSError as e:
+            print(f"Error: An unexpected error occurred while accessing 'tests/no_content_template.golden': {e}")
+            sys.exit(1)
+        diff = unified_diff(content_string, no_content_template)
+        diff_string = "".join(diff)
+        if diff_string == "":
+            return False
         # # Use in the event that the test cases fail for debugging
         # # Be sure to replace the no_content_template variable with the text generated from the
         # # content.txt file.
