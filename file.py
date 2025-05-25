@@ -38,13 +38,19 @@ def validate_url(url: str) -> bool:
             with open("tests/no_content_template.golden", "r", encoding="utf-8") as nct:
                 no_content_template = nct.read()
         except FileNotFoundError:
-            print("Error: The golden file 'tests/no_content_template.golden' was not found.")
+            print(
+                "Error: The golden file 'tests/no_content_template.golden' was not found."
+            )
             sys.exit(1)
         except PermissionError:
-            print("Error: Permission denied while trying to read 'tests/no_content_template.golden'.")
+            print(
+                "Error: Permission denied while trying to read 'tests/no_content_template.golden'."
+            )
             sys.exit(1)
         except OSError as e:
-            print(f"Error: An unexpected error occurred while accessing 'tests/no_content_template.golden': {e}")
+            print(
+                f"Error: An unexpected error occurred while accessing 'tests/no_content_template.golden': {e}"
+            )
             sys.exit(1)
         diff = unified_diff(content_string, no_content_template)
         diff_string = "".join(diff)
