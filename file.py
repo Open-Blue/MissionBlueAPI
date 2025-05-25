@@ -2,7 +2,6 @@
 
 import csv
 import os
-import sys
 from difflib import unified_diff
 
 import pandas as pd
@@ -23,26 +22,28 @@ if not os.path.isdir(DIRECTORY_NAME):
 
 def validate_url(url: str) -> bool:
     """Validate URL to ensure it returns expected content.
-    
+
     Returns:
         bool: True if URL returns expected content, False otherwise.
     """
     try:
         page = requests.get(url, timeout=10)
         content_string = page.text
-        
+
         try:
             with open("tests/no_content_template.golden", "r", encoding="utf-8") as nct:
                 no_content_template = nct.read()
         except (FileNotFoundError, PermissionError, OSError) as e:
             # Don't use sys.exit in functions - raise exceptions instead
             raise FileNotFoundError(f"Cannot read golden file: {e}") from e
-            
+
         # Return True if content matches template (no differences)
-        diff = unified_diff(content_string.splitlines(), no_content_template.splitlines())
+        diff = unified_diff(
+            content_string.splitlines(), no_content_template.splitlines()
+        )
         diff_list = list(diff)
         return len(diff_list) == 0  # True if no differences found
-        
+
     except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError) as e:
         raise requests.exceptions.RequestException(f"URL validation failed: {e}") from e
 
@@ -67,7 +68,7 @@ def extract_post_data(posts: list[dict]) -> list[dict]:
             post_id = post["uri"].split("/")[-1]
             post_link = f"https://bsky.app/profile/{author_handle}/post/{post_id}"
 
-            if not validate_url(post_link):
+            if validate_url(post_link):
                 continue
 
             extracted_data.append(

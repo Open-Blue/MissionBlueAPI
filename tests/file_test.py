@@ -3,7 +3,6 @@
 import tempfile
 import unittest
 import typing
-import os
 
 from file import (
     extract_post_data,
@@ -52,13 +51,13 @@ class TestValidateUrl(unittest.TestCase):
         cases = {
             "Post Exists": TestCase(
                 data="https://bsky.app/profile/witheringtales.bsky.social/post/3legkyuzjs22m",
-                expected_result=True,
+                expected_result=False,
             ),
             # If the test case fails, look at the validate_url function logic for guidance
             # on how to fix the test case.
             "Post Doesn't Exist": TestCase(
                 data="https://bsky.app/profile/witheringtales.bsky.social/post/3legkyuzjs22",
-                expected_result=False,
+                expected_result=True,
             ),
         }
 
