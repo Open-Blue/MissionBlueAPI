@@ -5,7 +5,18 @@ on:
       - 'tests/*.golden'
       - '**.md'
     # Prevent triggering on automated commits
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'tests/*.golden'
+      - '**.md'
+
+jobs:
+  run-test:
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    # …rest of steps…
 
 
 jobs:
