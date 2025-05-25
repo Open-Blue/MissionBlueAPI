@@ -22,51 +22,29 @@ if not os.path.isdir(DIRECTORY_NAME):
 
 
 def validate_url(url: str) -> bool:
-    """Validate URL to ensure it is a valid URL.
-
-    Args:
-        url (str): URL to validate.
-
+    """Validate URL to ensure it returns expected content.
+    
     Returns:
-        bool: True if URL is valid, False otherwise.
-
+        bool: True if URL returns expected content, False otherwise.
     """
     try:
         page = requests.get(url, timeout=10)
         content_string = page.text
+        
         try:
             with open("tests/no_content_template.golden", "r", encoding="utf-8") as nct:
                 no_content_template = nct.read()
-        except FileNotFoundError:
-            print(
-                "Error: The golden file 'tests/no_content_template.golden' was not found."
-            )
-            sys.exit(1)
-        except PermissionError:
-            print(
-                "Error: Permission denied while trying to read 'tests/no_content_template.golden'."
-            )
-            sys.exit(1)
-        except OSError as e:
-            print(
-                f"Error: An unexpected error occurred while accessing 'tests/no_content_template.golden': {e}"
-            )
-            sys.exit(1)
-        diff = unified_diff(content_string, no_content_template)
-        diff_string = "".join(diff)
-        if diff_string == "":
-            return False
-        # # Use in the event that the test cases fail for debugging
-        # # Be sure to replace the no_content_template variable with the text generated from the
-        # # content.txt file.
-        # with open("content.txt", "w", encoding="utf-8") as content, open("no_content.txt", "w", encoding="utf-8") as no_content:
-        #     content.write(content_string)
-        #     no_content.write(no_content_template)
-        # print(f"{diff_string}")
-        return True
-    except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError):
-        print("Page Not Found")
-        sys.exit(1)
+        except (FileNotFoundError, PermissionError, OSError) as e:
+            # Don't use sys.exit in functions - raise exceptions instead
+            raise FileNotFoundError(f"Cannot read golden file: {e}") from e
+            
+        # Return True if content matches template (no differences)
+        diff = unified_diff(content_string.splitlines(), no_content_template.splitlines())
+        diff_list = list(diff)
+        return len(diff_list) == 0  # True if no differences found
+        
+    except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError) as e:
+        raise requests.exceptions.RequestException(f"URL validation failed: {e}") from e
 
 
 def extract_post_data(posts: list[dict]) -> list[dict]:

@@ -3,6 +3,7 @@
 import tempfile
 import unittest
 import typing
+import os
 
 from file import (
     extract_post_data,
