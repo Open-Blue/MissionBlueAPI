@@ -42,7 +42,7 @@ def validate_url(url: str) -> bool:
             content_string.splitlines(), no_content_template.splitlines()
         )
         diff_list = list(diff)
-        return len(diff_list) == 0  # True if no differences found
+        return len(diff_list) != 0  # True if differences found
 
     except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError) as e:
         raise requests.exceptions.RequestException(f"URL validation failed: {e}") from e
@@ -68,7 +68,7 @@ def extract_post_data(posts: list[dict]) -> list[dict]:
             post_id = post["uri"].split("/")[-1]
             post_link = f"https://bsky.app/profile/{author_handle}/post/{post_id}"
 
-            if validate_url(post_link):
+            if not validate_url(post_link):
                 continue
 
             extracted_data.append(
