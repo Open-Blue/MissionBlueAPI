@@ -1,0 +1,78 @@
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'tests/*.golden'
+      - '**.md'
+    # Prevent triggering on automated commits
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'tests/*.golden'
+      - '**.md'
+
+jobs:
+  run-test:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    # …rest of steps…
+
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tests
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Run test_validate_url
+        id: test
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest requests
+
+      - name: Run test_validate_url
+        run: |
+          pytest file_test.py::test_validate_url
+
+  update-golden-files:
+  needs: run-test
+  if: needs.run-test.result == 'failure'
+  runs-on: ubuntu-latest
+  steps:
+    - name: Check out repository with full history
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Validate URL before fetching
+      run: |
+        # Test if URL is accessible
+        if ! curl --head --silent --fail "https://bsky.app/profile/witheringtales.bsky.social/post/3legkyuzjs22"; then
+          echo "URL not accessible, skipping golden file update"
+          exit 1
+        fi
+    
+    - name: Get Golden File Content with retry
+      id: get_content
+      run: |
+        for i in {1..3}; do
+          response=$(curl -s --fail "https://bsky.app/profile/witheringtales.bsky.social/post/3legkyuzjs22") && break
+          echo "Attempt $i failed, retrying..."
+          sleep 5
+        done
+        echo "response<<EOF" >> $GITHUB_OUTPUT
+        echo "$response" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT

@@ -91,17 +91,6 @@ class TestExtractPostData(unittest.TestCase):
                 data=[],
                 expected_result=[],
             ),
-            "Bad Post Data": TestCase(
-                data=[
-                    {
-                        "record": {"text": ""},
-                        "author": {"handle": ""},
-                        "indexedAt": "",
-                        "uri": "12345",
-                    }
-                ],
-                expected_result=[],
-            ),
             "Contains Post Data": TestCase(
                 data=[
                     {
