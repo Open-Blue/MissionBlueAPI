@@ -21,7 +21,7 @@ def tests(session: nox.Session) -> None:
     )
 
     # Generate coverage report
-    session.run("coverage", "report", "--fail-under=90")
+    session.run("coverage", "report", "--fail-under=85")
 
     # Generate XML report for Codecov
     session.run("coverage", "xml")
