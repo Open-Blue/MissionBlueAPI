@@ -72,7 +72,9 @@ def search_posts(params, token):
                 total_fetched += len(new_posts)
 
                 # Update progress bar
-                progress(len(new_posts))
+                # Update progress bar
+                remaining = posts_limit - (total_fetched - len(new_posts))
+                progress(min(len(new_posts), remaining))
 
                 if posts_limit and total_fetched >= posts_limit:
                     print(
