@@ -304,10 +304,10 @@ def generate_query_params(
     "--posts_limit",
     type=click.IntRange(1, None),
     required=False,
-    default=1000,
+    default=500,
     help=(
         "Set the total number of posts to fetch from the API across all paginated responses. This value limits the total data retrieved "
-        "even if multiple API calls are required. If not specified, 1000 posts will be recieved."
+        "even if multiple API calls are required. If not specified, 500 posts will be recieved."
     ),
 )
 def main(
@@ -322,7 +322,7 @@ def main(
     url: str = "",
     tags: tuple = (),
     limit: int = 25,
-    posts_limit: int = 1000,
+    posts_limit: int = 500,
 ) -> None:
     """Method that tests if each click param flag is being passed in correctly."""
     # pylint: disable=R0913
