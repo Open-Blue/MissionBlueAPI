@@ -1,4 +1,4 @@
-"""This module conatins the BlueSky Web Scrapper."""
+"""This module contains the BlueSky Web Scrapper."""
 
 import click
 import requests

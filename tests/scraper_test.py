@@ -1,4 +1,4 @@
-"""Testing suite for the mission_blue module."""
+"""Testing suite for the scraper module."""
 
 import unittest
 import requests
@@ -25,7 +25,7 @@ class TestSearchPosts(unittest.TestCase):
 
     @patch("scraper.requests.get")
     def test_no_token(self, mock_get: MagicMock) -> None:
-        """Test if the function raises ValueError when a token it not provided."""
+        """Test if the function raises ValueError when a token is not provided."""
         params = {"q": "test"}
         token = None
 
@@ -34,8 +34,6 @@ class TestSearchPosts(unittest.TestCase):
 
         mock_get.assert_not_called()
         self.assertIn("token", str(cm.exception).lower())
-
-    # Ensure that the function returns an empty list when no posts are found
 
     @patch("scraper.requests.get")
     def test_valid_response(self, mock_get: MagicMock) -> None:
@@ -92,7 +90,7 @@ class TestSearchPosts(unittest.TestCase):
         )
         mock_get.return_value = mock_response
 
-        # Redircting stdout to StringIO
+        # Redirecting stdout to StringIO
         captured_output = io.StringIO()
         sys.stdout = captured_output
 

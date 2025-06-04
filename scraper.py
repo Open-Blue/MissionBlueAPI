@@ -56,7 +56,7 @@ def search_posts(params, token):
     }
 
     total_fetched = 0
-    posts_limit = params.get("posts_limit", 1000)
+    posts_limit = params.get("posts_limit", 500)
     butterfly_bar = bar_factory("✨", tip="🦋", errors="🔥🧯👩‍🚒")
 
     with alive_bar(posts_limit, bar=butterfly_bar, spinner="waves") as progress:
@@ -80,7 +80,7 @@ def search_posts(params, token):
                     )
                     return posts[:posts_limit]
 
-                # Move to the enxt page if available
+                # Move to the nextt page if available
                 next_cursor = data.get("cursor")
                 if not next_cursor:
                     print(f"All posts fetched. Total: {total_fetched}")
