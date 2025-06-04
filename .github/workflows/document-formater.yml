@@ -1,10 +1,9 @@
 name: Document Formatter
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-
+    branches: [main]
 jobs:
   yaml-format:
     runs-on: ubuntu-latest
@@ -21,5 +20,5 @@ jobs:
           git add .
           git commit -m 'Formatted YAML files'
       - name: Check for changes
-        run: |
+        run: |-
           git diff --exit-code
