@@ -76,13 +76,16 @@ def search_posts(params, token):
                 remaining = posts_limit - (total_fetched - len(new_posts))
                 progress(min(len(new_posts), remaining))
 
-                if posts_limit and total_fetched >= posts_limit:
+                if total_fetched >= posts_limit:
                     print(
                         f"Fetched {total_fetched} posts, total: {total_fetched}/{posts_limit}"
                     )
-                    return posts[:posts_limit]
+                    # Truncate only if we exceeded the limit
+                    if len(posts) > posts_limit:
+                        posts = posts[:posts_limit]
+                    return posts
 
-                # Move to the nextt page if available
+                # Move to the next page if available
                 next_cursor = data.get("cursor")
                 if not next_cursor:
                     print(f"All posts fetched. Total: {total_fetched}")
