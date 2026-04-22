@@ -1,24 +1,24 @@
 # Core dependencies
-requests>=2.31.0
-pandas>=2.2.0
-python-dotenv>=1.0.0
-openpyxl>=3.1.2
-click>=8.1.7
-alive_progress>=3.1.5
+requests>=2.33.1
+pandas>=3.0.2
+python-dotenv>=1.2.2
+openpyxl>=3.1.5
+click>=8.3.2
+alive_progress>=3.3.0
 
 # Testing
-pytest>=8.0.0
-coverage[toml]>=7.4.0
-mypy>=1.8.0
+pytest>=9.0.3
+coverage[toml]>=7.13.5
+mypy>=1.20.2
 
 # Code quality
-black>=24.1.1
-ruff>=0.2.1
-pylint>=3.0.3
+black>=26.3.1
+ruff>=0.15.11
+pylint>=4.0.5
 
 # Development tools
-nox>=2024.3.2
-tox>=4.15.0
+nox>=2026.4.10
+tox>=4.53.0
 
 # pandas-stubs
 # types-requests
